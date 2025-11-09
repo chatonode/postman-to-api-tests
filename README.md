@@ -1,4 +1,4 @@
-# API Testing Template
+# Postato
 
 > Zero-code migration from Postman to TypeScript test suites
 
@@ -51,7 +51,7 @@ Please read AGENT_INSTRUCTIONS.md and generate the complete test suite.
 
 ```bash
 # 1. Clone and install
-git clone <repository-url> && cd api-testing-template
+git clone <repository-url> && cd postato
 npm install
 
 # 2. Configure environment
@@ -76,7 +76,7 @@ npm test
 ## 📁 Project Structure
 
 ```
-api-testing-template/
+postato/
 │
 ├── postman/
 │   └── v1/

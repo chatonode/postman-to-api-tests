@@ -1,7 +1,7 @@
 {
-  "name": "api-testing-template",
+  "name": "postato",
   "version": "1.0.0",
-  "description": "TypeScript + SuperTest API testing template that converts Postman collections into version-controlled test suites",
+  "description": "Postato - TypeScript + SuperTest API testing template that converts Postman collections into version-controlled test suites",
   "main": "index.js",
   "scripts": {
     "test": "jest",

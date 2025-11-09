@@ -1,8 +1,8 @@
-# API Testing Template - Agent Instructions
+# Postato - Agent Instructions
 
 ## 🎯 What This Project Is
 
-This is a **TypeScript + SuperTest API testing framework** that converts Postman collections into version-controlled, programmatic test suites. This file is the **SINGLE SOURCE OF TRUTH** for AI agents working on this project.
+**Postato** is a **TypeScript + SuperTest API testing framework** that converts Postman collections into version-controlled, programmatic test suites. This file is the **SINGLE SOURCE OF TRUTH** for AI agents working on this project.
 
 **Project Identity:**
 - **Framework**: SuperTest (HTTP assertions library)
