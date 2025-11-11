@@ -19,10 +19,24 @@
     "typescript",
     "jest",
     "postman",
-    "test-automation"
+    "test-automation",
+    "code-generation",
+    "testing-framework",
+    "rest-api"
   ],
-  "author": "",
+  "author": "chatonode",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/postato/postato.git"
+  },
+  "bugs": {
+    "url": "https://github.com/postato/postato/issues"
+  },
+  "homepage": "https://github.com/postato/postato#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "dependencies": {
     "@postato/shared": "^0.2.10",
     "dotenv": "^16.4.5",

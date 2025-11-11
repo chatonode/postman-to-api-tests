@@ -7,6 +7,7 @@ We take your Postman requests and turn them into production-ready test fries—p
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue)](https://www.typescriptlang.org/)
 [![Jest](https://img.shields.io/badge/Jest-29.7-green)](https://jestjs.io/)
 [![npm](https://img.shields.io/badge/%40postato%2Fshared-0.2.10-red)](https://www.npmjs.com/package/@postato/shared)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ---
 
@@ -272,6 +273,12 @@ npm test
 - Adapts to single/microservices patterns
 - Professional test structure (Jest + SuperTest)
 - Version controlled, CI/CD ready
+
+---
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
