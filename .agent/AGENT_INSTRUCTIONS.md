@@ -48,13 +48,21 @@ Fix any failures, done.
 
 ```typescript
 // src/requests/products/create-product.request.ts
+import { TEMPLATE_CONFIG } from '@config/template.config';
+import { createRequest } from '@utils/request-builder';
+
 export const createProduct = async (authToken: string, body: any) => {
-  return createRequest()
+  // return createRequest()                               // SINGLE: no param
+  return createRequest(TEMPLATE_CONFIG.services.PRODUCTS) // OR MICROSERVICES: service name
     .post('/api/v1/products')
     .set('Authorization', `Bearer ${authToken}`)
     .send(body)
 }
 ```
+
+**Note:** Generator automatically injects the correct service parameter:
+- SINGLE architecture → `createRequest()` (no param)
+- MICROSERVICES → `createRequest(TEMPLATE_CONFIG.services.SERVICENAME)`
 
 **Test skeletons** - 🔄 Your job, fill TODOs:
 
@@ -332,12 +340,14 @@ The template supports 2 architectures. Your code adapts automatically.
 
 ```typescript
 // Config: ARCHITECTURE.SINGLE
+// Generated requests use: TEMPLATE_CONFIG.services.BASE
+
 beforeAll(async () => {
   authToken = await authHelper.getToken() // Returns single token
 })
 
 it('should work', async () => {
-  // createRequest() uses config.baseUrl automatically
+  // Generator already included correct service parameter
   const response = await endpoint(authToken, data)
   expect(response.status).toBe(200)
 })
@@ -346,7 +356,9 @@ it('should work', async () => {
 ### Microservices Architecture
 
 ```typescript
-// Config: ARCHITECTURE.MICROSERVICES
+// Config: ARCHITECTURE.MICROSERVICES  
+// Generated requests use: TEMPLATE_CONFIG.services.PAYMENTS, ORDERS, etc.
+
 beforeAll(async () => {
   // If AUTH_PATTERN.SINGLE - same as above
   authToken = await authHelper.getToken()
@@ -357,13 +369,13 @@ beforeAll(async () => {
 })
 
 it('should work', async () => {
-  // createRequest() uses service-specific URL automatically
+  // Generator already included correct service parameter for each endpoint
   const response = await endpoint(authToken, data)
   expect(response.status).toBe(200)
 })
 ```
 
-**You don't need to check config.** The utilities handle it. Write tests the same way regardless of architecture.
+**You don't need to check config or pass service names.** The generator already injected the correct service into each request wrapper. Write tests the same way regardless of architecture.
 
 ---
 

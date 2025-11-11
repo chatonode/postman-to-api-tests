@@ -16,71 +16,46 @@ import {
 /**
  * Create a SuperTest request instance with base configuration
  *
- * For SINGLE architecture: createRequest()
- * For MICROSERVICES architecture: createRequest(TEMPLATE_CONFIG.services.PAYMENTS)
+ * Generated request files automatically pass the correct service name for MICROSERVICES.
+ * For SINGLE architecture, parameter can be omitted and defaults to the only service.
  *
- * @param serviceName - Required if architecture is ARCHITECTURE.MICROSERVICES
- * @returns SuperTest instance configured for the specified service or base URL
- *
- * @example
- * // Single API pattern
- * const api = createRequest();
- * await api.get('/users').expect(200);
+ * @param serviceName - Optional service name from TEMPLATE_CONFIG.services
+ * @returns SuperTest instance configured for the specified service
  *
  * @example
- * // Microservices pattern
- * const paymentsApi = createRequest(TEMPLATE_CONFIG.services.PAYMENTS);
- * await paymentsApi.get('/transactions').expect(200);
+ * // SINGLE architecture (no parameter needed):
+ * createRequest().get('/users')
+ * 
+ * // MICROSERVICES architecture (parameter injected by generator):
+ * createRequest(TEMPLATE_CONFIG.services.PAYMENTS).get('/transactions')
  */
 export const createRequest = (serviceName?: ServiceName) => {
   const config = getConfig();
+  const services = (config as any).services;
 
-  // =================================
-  // SINGLE ARCHITECTURE
-  // =================================
-  if (TEMPLATE_CONFIG.architecture === ARCHITECTURE.SINGLE) {
-    const baseUrl = (config as any).baseUrl;
-    if (!baseUrl) {
-      throw new Error(
-        `baseUrl not configured in environment file\n` +
-          `Ensure your environment config includes baseUrl when using ARCHITECTURE.SINGLE`
-      );
-    }
-    return request(baseUrl);
+  if (!services) {
+    throw new Error(
+      `Services not configured in environment file\n` +
+        `Ensure your environment config includes the services object`
+    );
   }
 
-  // =================================
-  // MICROSERVICES ARCHITECTURE
-  // =================================
-  if (TEMPLATE_CONFIG.architecture === ARCHITECTURE.MICROSERVICES) {
-    if (!serviceName) {
-      // Default to first available service when not specified
-      const firstServiceKey = Object.keys(TEMPLATE_CONFIG.services)[0] as keyof typeof TEMPLATE_CONFIG.services;
-      serviceName = TEMPLATE_CONFIG.services[firstServiceKey];
-    }
-
-    const services = (config as any).services;
-
-    if (!services) {
-      throw new Error(
-        `Services not configured in environment file\n` +
-          `Ensure your environment config includes the services object when using ARCHITECTURE.MICROSERVICES`
-      );
-    }
-
-    if (!services[serviceName]) {
-      const availableServices = Object.keys(services).join(', ');
-      throw new Error(
-        `Service "${serviceName}" not configured in environment\n` +
-          `Available services: ${availableServices}\n` +
-          `Add ${serviceName.toUpperCase()}_API_URL to your .env file`
-      );
-    }
-
-    return request(services[serviceName]);
+  // If no serviceName provided, default to first service
+  if (!serviceName) {
+    const firstServiceKey = Object.keys(TEMPLATE_CONFIG.services)[0] as keyof typeof TEMPLATE_CONFIG.services;
+    serviceName = TEMPLATE_CONFIG.services[firstServiceKey];
   }
 
-  throw new Error(`Invalid architecture: ${TEMPLATE_CONFIG.architecture}`);
+  if (!services[serviceName]) {
+    const availableServices = Object.keys(services).join(', ');
+    throw new Error(
+      `Service "${serviceName}" not configured in environment\n` +
+        `Available services: ${availableServices}\n` +
+        `Check your .env file for the corresponding URL variable`
+    );
+  }
+
+  return request(services[serviceName]);
 };
 
 /**
@@ -128,7 +103,7 @@ export const withQueryParams = (req: Test, params: Record<string, any>): Test =>
  * 
  * @param path - Request path
  * @param token - Optional authentication token
- * @param serviceName - Optional service name for microservices
+ * @param serviceName - Optional service name (defaults to first service)
  */
 export const buildGetRequest = (path: string, token?: string, serviceName?: ServiceName): Test => {
   const req = createRequest(serviceName).get(path);
@@ -141,7 +116,7 @@ export const buildGetRequest = (path: string, token?: string, serviceName?: Serv
  * @param path - Request path
  * @param body - Request body
  * @param token - Optional authentication token
- * @param serviceName - Optional service name for microservices
+ * @param serviceName - Optional service name (defaults to first service)
  */
 export const buildPostRequest = (path: string, body: any, token?: string, serviceName?: ServiceName): Test => {
   const req = createRequest(serviceName).post(path).send(body);
@@ -154,7 +129,7 @@ export const buildPostRequest = (path: string, body: any, token?: string, servic
  * @param path - Request path
  * @param body - Request body
  * @param token - Optional authentication token
- * @param serviceName - Optional service name for microservices
+ * @param serviceName - Optional service name (defaults to first service)
  */
 export const buildPutRequest = (path: string, body: any, token?: string, serviceName?: ServiceName): Test => {
   const req = createRequest(serviceName).put(path).send(body);
@@ -167,7 +142,7 @@ export const buildPutRequest = (path: string, body: any, token?: string, service
  * @param path - Request path
  * @param body - Request body
  * @param token - Optional authentication token
- * @param serviceName - Optional service name for microservices
+ * @param serviceName - Optional service name (defaults to first service)
  */
 export const buildPatchRequest = (path: string, body: any, token?: string, serviceName?: ServiceName): Test => {
   const req = createRequest(serviceName).patch(path).send(body);
@@ -179,7 +154,7 @@ export const buildPatchRequest = (path: string, body: any, token?: string, servi
  * 
  * @param path - Request path
  * @param token - Optional authentication token
- * @param serviceName - Optional service name for microservices
+ * @param serviceName - Optional service name (defaults to first service)
  */
 export const buildDeleteRequest = (path: string, token?: string, serviceName?: ServiceName): Test => {
   const req = createRequest(serviceName).delete(path);
