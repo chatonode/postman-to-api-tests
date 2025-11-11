@@ -1,6 +1,6 @@
 # Postato 🥔
 
-**Mash your Postman collections into crispy TypeScript tests.**
+**Mash your Postman collections into crispy TypeScript tests!**
 
 We take your Postman requests and turn them into production-ready test fries—perfectly seasoned with TypeScript, Jest, and SuperTest.
 
